@@ -18,13 +18,11 @@
 
 		<!-- Filtered list -->
 		<ul>
-			<li
-				v-for="(task, index) in filteredTasks"
-				:key="index"
-				:class="{ done: task.done }"
-				@click="toggleTask(index)"
-			>
-				{{ task.title }}
+			<li v-for="(task, index) in filteredTasks" :key="index" :class="{ done: task.done }">
+				<span @click="toggleTask(index)">
+					{{ task.title }}
+				</span>
+				<button class="remove-btn" @click.stop="removeTask(index)">✖</button>
 			</li>
 		</ul>
 	</div>
@@ -75,6 +73,10 @@ function addTask(task) {
 function toggleTask(index) {
 	tasks.value[index].done = !tasks.value[index].done;
 }
+
+function removeTask(index) {
+	tasks.value.splice(index, 1);
+}
 </script>
 
 <style scoped>
@@ -106,5 +108,17 @@ li:hover {
 .filters button.active {
 	background-color: #42b983;
 	color: white;
+}
+.remove-btn {
+	margin-left: 10px;
+	background-color: #ff4d4d;
+	color: white;
+	border: none;
+	padding: 4px 8px;
+	cursor: pointer;
+}
+
+.remove-btn:hover {
+	background-color: #e60000;
 }
 </style>
