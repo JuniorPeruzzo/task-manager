@@ -32,7 +32,7 @@
 					<span @click="toggleTask(index)">
 						{{ task.title }}
 					</span>
-					<button @click.stop="startEdit(index, task.title)">✎</button>
+					<button class="edit-btn" @click.stop="startEdit(index, task.title)">✎</button>
 					<button class="remove-btn" @click.stop="removeTask(index)">✖</button>
 				</template>
 			</li>
@@ -153,5 +153,13 @@ li:hover {
 	font-size: 16px;
 	width: 100%;
 	box-sizing: border-box;
+}
+.edit-btn {
+	margin-left: 10px;
+	background-color: #4da0ff;
+	color: white;
+	border: none;
+	padding: 4px 8px;
+	cursor: pointer;
 }
 </style>
