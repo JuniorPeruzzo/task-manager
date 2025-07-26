@@ -19,10 +19,22 @@
 		<!-- Filtered list -->
 		<ul>
 			<li v-for="(task, index) in filteredTasks" :key="index" :class="{ done: task.done }">
-				<span @click="toggleTask(index)">
-					{{ task.title }}
-				</span>
-				<button class="remove-btn" @click.stop="removeTask(index)">✖</button>
+				<template v-if="editingIndex === index">
+					<input
+						v-model="editingText"
+						@keyup.enter="confirmEdit(index)"
+						@blur="confirmEdit(index)"
+						class="edit-input"
+						autofocus
+					/>
+				</template>
+				<template v-else>
+					<span @click="toggleTask(index)">
+						{{ task.title }}
+					</span>
+					<button @click.stop="startEdit(index, task.title)">✎</button>
+					<button class="remove-btn" @click.stop="removeTask(index)">✖</button>
+				</template>
 			</li>
 		</ul>
 	</div>
@@ -33,6 +45,8 @@ import { ref, computed, watch, onMounted } from "vue";
 import NewTaskForm from "./NewTaskForm.vue";
 
 const STORAGE_KEY = "vue-tasks";
+const editingIndex = ref(null);
+const editingText = ref("");
 
 const tasks = ref([]);
 
@@ -77,6 +91,19 @@ function toggleTask(index) {
 function removeTask(index) {
 	tasks.value.splice(index, 1);
 }
+
+function startEdit(index, text) {
+	editingIndex.value = index;
+	editingText.value = text;
+}
+
+function confirmEdit(index) {
+	if (editingText.value.trim() !== "") {
+		tasks.value[index].title = editingText.value.trim();
+	}
+	editingIndex.value = null;
+	editingText.value = "";
+}
 </script>
 
 <style scoped>
@@ -120,5 +147,11 @@ li:hover {
 
 .remove-btn:hover {
 	background-color: #e60000;
+}
+.edit-input {
+	padding: 4px;
+	font-size: 16px;
+	width: 100%;
+	box-sizing: border-box;
 }
 </style>
